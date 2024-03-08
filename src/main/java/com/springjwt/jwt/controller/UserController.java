@@ -14,22 +14,44 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springjwt.jwt.dto.req.CreateUserDto;
 import com.springjwt.jwt.entity.User;
 import com.springjwt.jwt.services.UserService;
+import com.springjwt.jwt.utils.constant.EndpointConstant;
+import com.springjwt.jwt.utils.constant.MessageConstant;
+import com.springjwt.jwt.utils.res.ResponseDataArr;
+import com.springjwt.jwt.utils.res.ResponseDataObj;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping(
+  EndpointConstant.API +
+  EndpointConstant.VERSION +
+  EndpointConstant.USER
+)
 public class UserController {
 
   @Autowired
   private UserService userService;
 
   @PostMapping
-  public ResponseEntity<User> savedUserHandler(@RequestBody CreateUserDto createUserDto) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.registerUser(createUserDto));
+  public ResponseEntity<ResponseDataObj<User>> savedUserHandler(@RequestBody CreateUserDto createUserDto) {
+    return ResponseEntity
+    .status(HttpStatus.CREATED)
+    .body(
+      new ResponseDataObj<>(
+        String.format(MessageConstant.MESSAGE_INSERTED, createUserDto.getUsername()),
+        this.userService.registerUser(createUserDto)
+      )
+    );
   }
 
   @GetMapping
-  public ResponseEntity<List<User>> getAllUserHandler() {
-    return ResponseEntity.status(HttpStatus.OK).body(this.userService.getAllUser());
+  public ResponseEntity<ResponseDataArr<User>> getAllUserHandler() {
+    return ResponseEntity
+    .status(HttpStatus.OK)
+    .body(
+      new ResponseDataArr<>(
+        String.format(MessageConstant.MESSAGE_GETTED, "Users"),
+        this.userService.getAllUser()
+      )
+    );
   }
 
 }

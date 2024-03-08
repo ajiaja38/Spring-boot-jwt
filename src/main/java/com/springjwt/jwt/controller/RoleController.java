@@ -14,9 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springjwt.jwt.dto.req.CreateRoleDto;
 import com.springjwt.jwt.entity.Role;
 import com.springjwt.jwt.services.RoleService;
+import com.springjwt.jwt.utils.constant.EndpointConstant;
 
 @RestController
-@RequestMapping("/role")
+@RequestMapping(
+  EndpointConstant.API +
+  EndpointConstant.VERSION +
+  EndpointConstant.ROLE
+)
 public class RoleController {
   
   @Autowired
