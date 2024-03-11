@@ -1,5 +1,8 @@
 package com.springjwt.jwt.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,14 +34,17 @@ public class AuthController {
   
   @PostMapping("/login")
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  public ResponseEntity<ResponseDataObj<String>> loginHandler(@RequestBody LoginDto loginDto) {
+  public ResponseEntity<ResponseDataObj<Map<String, Object>>> loginHandler(@RequestBody LoginDto loginDto) {
     try {
       User user = this.userService.validateCredentials(loginDto);
       String accessToken = this.jwtUtils.generateToken(user);
+
+      Map<String, Object> res = new HashMap<>();
+      res.put("accessToken", accessToken);
       
       ResponseDataObj response = new ResponseDataObj<>();
       response.setMessage("Berhasil Login");
-      response.setData(accessToken);
+      response.setData(res);
 
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
     } catch (RuntimeException e) {
