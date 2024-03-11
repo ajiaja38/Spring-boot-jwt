@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.springjwt.jwt.dto.req.CreateUserDto;
+import com.springjwt.jwt.dto.req.LoginDto;
 import com.springjwt.jwt.entity.Role;
 import com.springjwt.jwt.entity.User;
 import com.springjwt.jwt.repository.RoleRepository;
@@ -51,6 +52,23 @@ public class UserService implements UserInterface {
     return this.userRepository.findById(id).orElseThrow(
       () -> new RuntimeException("User tidak ditemukan")
     );
+  }
+
+  @Override
+  public User validateCredentials(LoginDto loginDto) {
+    User user = this.userRepository.findByUsername(loginDto.getUsername());
+
+    if (user == null) {
+      throw new RuntimeException("Username tidak ditemukan");
+    }
+
+    Boolean passwordMatch = this.passwordEncoder.matches(loginDto.getPassword(), user.getPassword());
+
+    if (!passwordMatch) {
+      throw new RuntimeException("Password tidak sesuai");
+    }
+
+    return user;
   }
   
 }
