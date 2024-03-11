@@ -42,6 +42,7 @@ public class UserController {
   }
 
   @GetMapping
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<ResponseDataArr<User>> getAllUserHandler() {
     return ResponseEntity
     .status(HttpStatus.OK)
