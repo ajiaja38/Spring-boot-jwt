@@ -41,11 +41,11 @@ public class JwtUtils {
 
   private Claims extractAllClaims(String token) {
     return Jwts
-            .parser()
-            .verifyWith(getSecretKey())
-            .build()
-            .parseSignedClaims(token)
-            .getPayload();
+      .parser()
+      .verifyWith(getSecretKey())
+      .build()
+      .parseSignedClaims(token)
+      .getPayload();
   }
 
   public String extractUsername(String token) {
